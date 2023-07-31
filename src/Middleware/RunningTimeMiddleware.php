@@ -43,7 +43,7 @@ class RunningTimeMiddleware
 
         // if (!app()->runningInConsole()) {
             $log = [
-                'time' => round(microtime(true) - LARAVEL_START, 2),
+                'time' => round(0, 2),
                 'path' => $path,
                 'params' => json_encode(['route_params' => $request->route() ? $request->route()->parameters() : null, 'params' => $request->all()], JSON_UNESCAPED_UNICODE),
             ];
