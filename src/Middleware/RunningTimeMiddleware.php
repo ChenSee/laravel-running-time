@@ -41,7 +41,7 @@ class RunningTimeMiddleware
         $this->redisTime = config('app.name') . ':laravel_running_time:time';
         $this->isDelayMode && $this->redis = app('redis');
 
-        if (!app()->runningInConsole()) {
+        // if (!app()->runningInConsole()) {
             $log = [
                 'time' => round(microtime(true) - LARAVEL_START, 2),
                 'path' => $path,
@@ -51,7 +51,7 @@ class RunningTimeMiddleware
             $logText = implode('||', $log) . "\n";
 
             $this->writeRequestLog($logText);
-        }
+        // }
 
         return $response;
     }
