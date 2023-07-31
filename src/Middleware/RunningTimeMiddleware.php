@@ -27,6 +27,7 @@ class RunningTimeMiddleware
      */
     public function handle($request, Closure $next)
     {
+        $start = microtime(true);
         $response = $next($request);
 
         $path = $request->path();
@@ -42,15 +43,15 @@ class RunningTimeMiddleware
         $this->isDelayMode && $this->redis = app('redis');
 
         // if (!app()->runningInConsole()) {
-            $log = [
-                'time' => round(0, 2),
-                'path' => $path,
-                'params' => json_encode(['route_params' => $request->route() ? $request->route()->parameters() : null, 'params' => $request->all()], JSON_UNESCAPED_UNICODE),
-            ];
+        $log = [
+            'time' => round(microtime(true) - $start, 2),
+            'path' => $path,
+            'params' => json_encode(['route_params' => $request->route() ? $request->route()->parameters() : null, 'params' => $request->all()], JSON_UNESCAPED_UNICODE),
+        ];
 
-            $logText = implode('||', $log) . "\n";
+        $logText = implode('||', $log) . "\n";
 
-            $this->writeRequestLog($logText);
+        $this->writeRequestLog($logText);
         // }
 
         return $response;
@@ -115,7 +116,6 @@ class RunningTimeMiddleware
         file_put_contents($logFilePath, $data, FILE_APPEND);
 
         if ($this->isDelayMode) {
-
         }
     }
 
